@@ -1,0 +1,8 @@
+/.vscode
+/Bố khổ quá mà
+venv/
+Models/
+Dataset/
+__pycache__/
+*.pyc
+*.pkl
