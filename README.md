@@ -14,7 +14,7 @@ A Python-based face recognition system using FaceNet, MTCNN, OpenCV, and TensorF
 
 ## Requirements
 
-* Python 3.10
+* Python 3.10 (tested with Python 3.10.11)
 * Webcam (for live recognition)
 
 Install dependencies:
@@ -30,7 +30,7 @@ pip install -r requirements.txt
 - Dataset/ : training images, processed images, and input videos
 - Models/ : FaceNet model and trained classifier
 - src/ : source code
-
+- Videos/ : input videos
 ---
 
 ## Setup
@@ -79,8 +79,13 @@ python src/single_face_rec.py
 ```bash
 python src/multi_face_rec.py
 ```
+### Face Recognition With Video
 
-
+Place the video file you want to test inside the videos/ folder.
+Then run the script and provide the video file name when prompted.
+```bash
+python src/multi_face_rec.py <video_name>
+```
 
 ---
 
@@ -90,19 +95,19 @@ The FaceNet model file (`20180402-114759.pb`) is downloaded automatically during
 
 If the model already exists in the `Models` directory, the download step is skipped.
 
+
 ---
 
 ## Acknowledgements
 
-This project was developed for learning and educational purposes.
+This project was developed for educational and learning purposes.
 
-The implementation was inspired by and partially based on David Sandberg's FaceNet project. Several components, concepts, and workflows were adapted and further modified during development.
-
-Special thanks to David Sandberg for providing open-source educational resources to the computer vision community.
+The implementation was inspired by existing open-source face recognition research and related materials. Several ideas, concepts, and workflows were adapted and modified during the development process to suit the objectives of this project.
 
 ### Reference
 
 * https://github.com/davidsandberg/facenet
+* https://miai.vn/2019/09/face-recog-2-0-nhan-dien-khuon-mat-trong-video-bang-mtcnn-va-facenet/
 ## License
 
-This project is intended for educational and research purposes.
+This project is intended solely for educational and research purposes.
