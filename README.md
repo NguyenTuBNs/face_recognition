@@ -84,7 +84,7 @@ python src/multi_face_rec.py
 Place the video file you want to test inside the videos/ folder.
 Then run the script and provide the video file name when prompted.
 ```bash
-python src/multi_face_rec.py <video_name>
+python src/multi_face_rec.py --name <video_name>
 ```
 
 ---

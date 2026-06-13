@@ -11,14 +11,17 @@ import time
 
 
 def main():
-#---------------------------------------------SETUP--------------------------------------------------#
-    VIDEO_NAME = ""  # Tên video (default : "") 
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--name', help='Name of the video you want to test on.', default=0)
+    args = parser.parse_args()
+
+    VIDEO_NAME = args.name
     FPD = 3                   # Frames per Detect 
     MINSIZE = 20
     THRESHOLD = [0.6, 0.7, 0.7]
     FACTOR = 0.709
     INPUT_IMAGE_SIZE = 160
-#----------------------------------------------------------------------------------------------------#
+
 
     #Đường dẫn 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -27,8 +30,8 @@ def main():
     FACENET_MODEL_PATH = os.path.join(BASE_PATH, '20180402-114759.pb')
 
     # Sử dụng camera mặc định nếu không có video cụ thể nào được chỉ định
-    if VIDEO_NAME != "":
-        VIDEO_BASE_PATH = os.path.join(BASE_DIR, "..", "Dataset", "FaceData", "Videos")
+    if VIDEO_NAME != 0:
+        VIDEO_BASE_PATH = os.path.join(BASE_DIR,"..", "Videos")
         VIDEO_PATH = os.path.join(VIDEO_BASE_PATH, VIDEO_NAME)
     else:
         VIDEO_PATH = 0  
