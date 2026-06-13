@@ -5,7 +5,7 @@ import urllib.request
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Tạo Videos
-videos_dir = os.path.join(BASE_DIR,"Dataset", "FaceData","Videos")
+videos_dir = os.path.join(BASE_DIR,"Videos")
 os.makedirs(videos_dir, exist_ok=True)
 
 # Tạo Models

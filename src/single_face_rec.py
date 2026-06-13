@@ -12,9 +12,11 @@ import cv2
 import time
 
 def main():
-    VIDEO_NAME = ""  # ---------------------------------------------------- Thay đổi tên video nếu cần
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--name', help='Name of the video you want to test on.', default=0)
+    args = parser.parse_args()
 
-    # Set các tham số
+    VIDEO_NAME = args.name
     MINSIZE = 20
     THRESHOLD = [0.6, 0.7, 0.7]
     FACTOR = 0.709
@@ -26,8 +28,8 @@ def main():
     CLASSIFIER_PATH = os.path.join(BASE_PATH, 'facemodel.pkl')
     FACENET_MODEL_PATH = os.path.join(BASE_PATH, '20180402-114759.pb')
 
-    if VIDEO_NAME != "":
-        VIDEO_BASE_PATH = os.path.join(BASE_DIR, "..", "Dataset", "FaceData", "Videos")
+    if VIDEO_NAME != 0:
+        VIDEO_BASE_PATH = os.path.join(BASE_DIR,"..", "Videos")
         VIDEO_PATH = os.path.join(VIDEO_BASE_PATH, VIDEO_NAME)
     else:
         VIDEO_PATH = 0  # Sử dụng camera mặc định nếu không có video cụ thể nào được chỉ định
@@ -66,13 +68,17 @@ def main():
 
             # Lấy video từ file video
             cap = cv2.VideoCapture(VIDEO_PATH)
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
             prev_time = time.time()
             while (cap.isOpened()):
                 # Đọc frame
                 ret, frame = cap.read()
-                frame = imutils.resize(frame, width=600)
-                frame = cv2.flip(frame, 1)
+                if not ret:
+                    break
+                if VIDEO_PATH == 0 : 
+                    frame = cv2.flip(frame, 1) 
 
                 bounding_boxes, _ = align.detect_face.detect_face(frame, MINSIZE, pnet, rnet, onet, THRESHOLD, FACTOR)
 
