@@ -22,7 +22,7 @@ Hệ thống nhận diện khuôn mặt bằng FaceNet + MTCNN (TensorFlow, Open
 1. Clone repo:
 
 ```bash
-git clone <repo_url>
+git clone https://github.com/NguyenTuBNs/face_recognition.git
 cd face_recognition
 ```
 
