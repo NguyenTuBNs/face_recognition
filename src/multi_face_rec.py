@@ -7,6 +7,12 @@ import pickle
 import align.detect_face
 import numpy as np
 import cv2
+import sys
+from pathlib import Path
+
+# Thêm parent directory để import config
+sys.path.insert(0, str(Path(__file__).parent.parent))
+import config
 
 
 def main():
@@ -15,36 +21,25 @@ def main():
     args = parser.parse_args()
 
     VIDEO_NAME = args.name
-    MINSIZE = 20
-    THRESHOLD = [0.6, 0.7, 0.7]
-    FACTOR = 0.709
-    INPUT_IMAGE_SIZE = 160
-
-    #Đường dẫn 
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    BASE_PATH = os.path.join(BASE_DIR, "..",'Models')
-    CLASSIFIER_PATH = os.path.join(BASE_PATH, 'facemodel.pkl')
-    FACENET_MODEL_PATH = os.path.join(BASE_PATH, '20180402-114759.pb')
 
     if VIDEO_NAME != 0:
-        VIDEO_BASE_PATH = os.path.join(BASE_DIR,"..", "Videos")
-        VIDEO_PATH = os.path.join(VIDEO_BASE_PATH, VIDEO_NAME)
+        VIDEO_PATH = str(config.VIDEOS_DIR / VIDEO_NAME)
     else:
         VIDEO_PATH = 0  # Sử dụng camera mặc định nếu không có video cụ thể nào được chỉ định
 
-    #Load model classifier đã train để nhận diện khuôn mặt -> tên 
+    # Load model classifier đã train để nhận diện khuôn mặt -> tên 
     try:
-        with open(CLASSIFIER_PATH, 'rb') as file:
+        with open(config.CLASSIFIER_PATH, 'rb') as file:
             model, class_names = pickle.load(file)
         print("Custom Classifier, Successfully loaded")
     except FileNotFoundError:
-        print(f"Error: Fail to load {CLASSIFIER_PATH}")
+        print(f"Error: Fail to load {config.CLASSIFIER_PATH}")
         return
 
     with tf.Graph().as_default():
 
         # Cài đặt GPU
-        gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.6)
+        gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=config.GPU_MEMORY_FRACTION)
         sess = tf.compat.v1.Session(
             config=tf.compat.v1.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
 
@@ -52,24 +47,24 @@ def main():
 
             # Load model Facenet embedding
             print('Loading feature extraction model')
-            facenet.load_model(FACENET_MODEL_PATH)
+            facenet.load_model(str(config.FACENET_MODEL_PATH))
 
             # Set up tensor
             images_placeholder = tf.compat.v1.get_default_graph().get_tensor_by_name("input:0")
             embeddings = tf.compat.v1.get_default_graph().get_tensor_by_name("embeddings:0")
             phase_train_placeholder = tf.compat.v1.get_default_graph().get_tensor_by_name("phase_train:0")
 
-            #Tạo MTCNN để phát hiện khuôn mặt trong video
+            # Tạo MTCNN để phát hiện khuôn mặt trong video
             BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-            BASE_PATH = os.path.join(BASE_DIR,"align" )
+            BASE_PATH = os.path.join(BASE_DIR, "align")
             pnet, rnet, onet = align.detect_face.create_mtcnn(sess, BASE_PATH)
 
             # Lấy video từ file video
             cap = cv2.VideoCapture(VIDEO_PATH)
-            cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH, config.FRAME_WIDTH)
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, config.FRAME_HEIGHT)
 
-            #Nếu path video null thì trả về deafult camera
+            # Nếu path video null thì trả về default camera
             while (cap.isOpened()):
                 # Đọc frame
                 ret, frame = cap.read()
@@ -78,8 +73,8 @@ def main():
                 if not ret:
                     break
 
-                # phát hiện khuôn măt trả về bounding box
-                bounding_boxes, _ = align.detect_face.detect_face(frame, MINSIZE, pnet, rnet, onet, THRESHOLD, FACTOR)
+                # phát hiện khuôn mặt trả về bounding box
+                bounding_boxes, _ = align.detect_face.detect_face(frame, config.MINSIZE, pnet, rnet, onet, config.THRESHOLD, config.FACTOR)
 
                 faces_found = bounding_boxes.shape[0]
 
@@ -97,7 +92,7 @@ def main():
                         cropped = frame[y1:y2, x1:x2, :]
                         
                         # Resize về kích thước 160x160 để đưa vào model Facenet
-                        scaled = cv2.resize(cropped, (INPUT_IMAGE_SIZE, INPUT_IMAGE_SIZE), interpolation=cv2.INTER_CUBIC)
+                        scaled = cv2.resize(cropped, (config.INPUT_IMAGE_SIZE, config.INPUT_IMAGE_SIZE), interpolation=cv2.INTER_CUBIC)
                         scaled = facenet.prewhiten(scaled)
 
                         face_batch.append(scaled)
@@ -121,7 +116,7 @@ def main():
                             best_class_index = np.argmax(predictions, axis=1)[0]
                             best_probability = predictions[0][best_class_index]
 
-                            if best_probability > 0.5:
+                            if best_probability > config.RECOGNITION_THRESHOLD:
                                 name = class_names[best_class_index]
                             else:
                                 name = "Unknown"

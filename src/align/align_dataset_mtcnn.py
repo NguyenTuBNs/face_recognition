@@ -29,7 +29,7 @@ from __future__ import print_function
 import sys
 import os
 import imageio.v2 as imageio
-#Thêm đường dẫn 
+# Thêm đường dẫn 
 sys.path.append(
     os.path.dirname(
         os.path.dirname(
@@ -37,6 +37,8 @@ sys.path.append(
         )
     )
 )
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 import argparse
 import tensorflow as tf
 tf.compat.v1.disable_eager_execution()
@@ -46,6 +48,7 @@ import align.detect_face
 import random
 from time import sleep
 from PIL import Image
+import config
 
 def main(args):
     sleep(random.random())
@@ -68,9 +71,9 @@ def main(args):
         sess = tf.compat.v1.Session(config=config_tf)
         pnet, rnet, onet = align.detect_face.create_mtcnn(sess, None)
     
-    minsize = 20 # minimum size of face
-    threshold = [ 0.6, 0.7, 0.7 ]  # three steps's threshold
-    factor = 0.709 # scale factor
+    minsize = config.MINSIZE
+    threshold = config.THRESHOLD
+    factor = config.FACTOR
 
     # Add a random key to the filename to allow alignment using multiple processes
     random_key = np.random.randint(0, high=99999)
@@ -172,15 +175,13 @@ def parse_arguments(argv):
 
 #Chuyển sang hardcode 
 if __name__ == '__main__':
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
     class Args:
-        input_dir = os.path.join(BASE_DIR, "Dataset", "FaceData", "raw")
-        output_dir = os.path.join(BASE_DIR, "Dataset", "FaceData", "processed")
+        input_dir = str(config.RAW_DATASET_PATH)
+        output_dir = str(config.PROCESSED_DATASET_PATH)
 
-        image_size = 160
-        margin = 32
-        random_order = True
-        gpu_memory_fraction = 0.25
-        detect_multiple_faces = False
+        image_size = config.ALIGN_IMAGE_SIZE
+        margin = config.ALIGN_MARGIN
+        random_order = config.ALIGN_RANDOM_ORDER
+        gpu_memory_fraction = config.ALIGN_GPU_MEMORY_FRACTION
+        detect_multiple_faces = config.ALIGN_DETECT_MULTIPLE_FACES
     main(Args())

@@ -34,7 +34,13 @@ import facenet
 import os
 import math
 import pickle
+import sys
+from pathlib import Path
 from sklearn.svm import SVC
+
+# Thêm parent directory để import config
+sys.path.insert(0, str(Path(__file__).parent.parent))
+import config
 
 def main(args):
   
@@ -167,28 +173,23 @@ def parse_arguments(argv):
     return parser.parse_args(argv)
 
 if __name__ == '__main__':
-    import os
-
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
     class Args:
         # ===== FIXED PATH =====
         mode = "TRAIN"
 
-        data_dir = os.path.join(BASE_DIR, "Dataset", "FaceData", "processed")
-        model = os.path.join(BASE_DIR, "Models", "20180402-114759.pb")
-        classifier_filename = os.path.join(BASE_DIR, "Models", "facemodel.pkl")
+        data_dir = str(config.PROCESSED_DATASET_PATH)
+        model = str(config.FACENET_MODEL_PATH)
+        classifier_filename = str(config.CLASSIFIER_PATH)
 
         # ===== HYPERPARAMETERS =====
-        batch_size = 1000
-        image_size = 160
-        seed = 666
+        batch_size = config.CLASSIFIER_BATCH_SIZE
+        image_size = config.INPUT_IMAGE_SIZE
+        seed = config.CLASSIFIER_SEED
 
         # ===== OPTIONAL =====
         use_split_dataset = False
         test_data_dir = None
-        min_nrof_images_per_class = 20
-        nrof_train_images_per_class = 10
+        min_nrof_images_per_class = config.MIN_NROF_IMAGES_PER_CLASS
+        nrof_train_images_per_class = config.NROF_TRAIN_IMAGES_PER_CLASS
 
     main(Args())
-#fix tf version + hardcode path

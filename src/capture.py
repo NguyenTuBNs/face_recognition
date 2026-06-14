@@ -1,7 +1,13 @@
 import cv2
 import os
+import sys
+from pathlib import Path
 
-# Tạo thư mục nếu chưa tồn tại
+# Thêm parent directory để import config
+sys.path.insert(0, str(Path(__file__).parent.parent))
+import config
+
+
 def create_directory(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -16,16 +22,8 @@ if __name__ == "__main__":
     count = 0
     nameID = str(input("Enter Your Name: ")).lower()
 
-    #Đường dẫn lưu trữ
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(
-        BASE_DIR,
-        "..",
-        "Dataset",
-        "FaceData",
-        "raw",
-        nameID
-    )
+    # Đường dẫn lưu trữ
+    path = str(config.RAW_DATASET_PATH / nameID)
     create_directory(path)
 
     while True:
@@ -55,7 +53,7 @@ if __name__ == "__main__":
 
         cv2.imshow("WindowFrame", frame)
         cv2.waitKey(1)
-        if count >= 100:
+        if count >= config.CAPTURE_COUNT:
             break
 
     video.release()
