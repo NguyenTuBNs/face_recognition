@@ -1,113 +1,120 @@
 # Face Recognition System
 
-A Python-based face recognition system using FaceNet, MTCNN, OpenCV, and TensorFlow.
+Hệ thống nhận diện khuôn mặt bằng FaceNet + MTCNN (TensorFlow, OpenCV).
 
-## Features
+## Tính năng
 
-* Face detection using MTCNN
-* Face embedding extraction using FaceNet
-* Single/multi-face recognition
-* Real-time webcam recognition
-* Video-based recognition support
+- Phát hiện khuôn mặt bằng MTCNN
+- Trích xuất embedding bằng FaceNet
+- Nhận diện đơn/đa khuôn mặt (realtime, video)
 
 ---
 
-## Requirements
+## Yêu cầu
 
-* Python 3.10 (tested with Python 3.10.11)
-* Webcam (for live recognition)
+- Python 3.10 (đã test trên 3.10.11)
+- Webcam (nếu dùng realtime)
 
-Install dependencies:
+---
+
+## Clone & Cài đặt chi tiết
+
+1. Clone repo:
 
 ```bash
+git clone <repo_url>
+cd face_recognition
+```
+
+2. Tạo virtual environment (Windows):
+
+```powershell
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
----
-
-## Project Structure
-
-- Dataset/ : training images, processed images, and input videos
-- Models/ : FaceNet model and trained classifier
-- src/ : source code
-- Videos/ : input videos
----
-
-## Setup
-
-Run the setup script:
+3. Chạy setup (tải model nếu cần):
 
 ```bash
 python setup.py
 ```
 
-The setup script will:
+---
 
-* Create required folders
-* Download the FaceNet model (.pb)
-* Prepare project directories
+## Cấu trúc dự án (tối giản)
+
+- Dataset/  : chứa Dataset/FaceData/raw và Dataset/FaceData/processed
+- Models/   : chứa `20180402-114759.pb`, `facemodel.pkl`
+- src/      : mã nguồn (capture, preprocessing, training, recognition)
+- Videos/   : video dùng để test
+- config.py : cấu hình tập trung (để ở root)
 
 ---
 
-## Usage
+## Cách chạy (từ thư mục gốc project)
 
-### Capture Face Dataset
+1. Capture ảnh thô:
 
 ```bash
 python src/capture.py
 ```
-### Preprocessing
+
+2. Align / tiền xử lý (tạo dataset processed):
 
 ```bash
 python src/align/align_dataset_mtcnn.py
 ```
 
-### Train Classifier
+3. Huấn luyện classifier (tạo `Models/facemodel.pkl`):
 
 ```bash
 python src/classifier.py
 ```
 
-### Single Face Recognition
+4. Chạy nhận diện (single/multi):
 
 ```bash
 python src/single_face_rec.py
-```
-
-### Multiple Face Recognition
-
-```bash
 python src/multi_face_rec.py
 ```
-### Face Recognition With Video
 
-Place the video file you want to test inside the videos/ folder.
-Then run the script and provide the video file name when prompted.
+5. Test bằng video:
+
 ```bash
-python src/multi_face_rec.py --name <video_name>
+python src/multi_face_rec.py --name sample.mp4
 ```
 
 ---
 
-## Notes
+## Ghi chú (chỉ những điểm trọng tâm)
 
-The FaceNet model file (`20180402-114759.pb`) is downloaded automatically during setup.
-
-If the model already exists in the `Models` directory, the download step is skipped.
-
+- Đặt `config.py` ở root; chỉnh tham số ở đó để ảnh hưởng toàn cục (paths, thresholds, sizes, GPU, v.v.).
+- Luôn chạy script từ project root để `import config` hoạt động.
+- Code chạy ở TF1-compat mode (đã gọi `tf.compat.v1.disable_eager_execution()`) nếu máy có TF2.
+- Khi capture, `config.CAPTURE_COUNT` là số ảnh mặc định cần chụp cho mỗi người.
 
 ---
 
-## Acknowledgements
+## References
 
-This project was developed for educational and learning purposes.
+Trích yếu các nguồn tham khảo chính:
 
-The implementation was inspired by existing open-source face recognition research and related materials. Several ideas, concepts, and workflows were adapted and modified during the development process to suit the objectives of this project.
+- FaceNet: https://github.com/davidsandberg/facenet
+- MTCNN implementation: https://github.com/kpzhang93/MTCNN_face_detection_alignment
+- OpenCV (I/O & preprocessing): https://opencv.org/
+- Vietnamese tutorial: https://miai.vn/2019/09/face-recog-2-0-nhan-dien-khuon-mat-trong-video-bang-mtcnn-va-facenet/
 
-### Reference
+---
 
-* https://github.com/davidsandberg/facenet
-* https://miai.vn/2019/09/face-recog-2-0-nhan-dien-khuon-mat-trong-video-bang-mtcnn-va-facenet/
+## Khắc phục lỗi thường gặp
+
+- "ModuleNotFoundError: config": chạy script từ project root (đảm bảo `config.py` ở root)
+- Thiếu model `.pb` hoặc `.pkl`: chạy `python setup.py` hoặc đặt files vào `Models/`
+- Vấn đề TensorFlow/CUDA: kiểm tra version tương thích và driver
+
+---
+
 ## License
 
-This project is intended solely for educational and research purposes.
+Dùng cho mục đích học tập và nghiên cứu.

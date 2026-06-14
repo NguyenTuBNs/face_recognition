@@ -5,6 +5,12 @@ import os
 import tensorflow as tf
 tf.compat.v1.disable_eager_execution()
 import align.detect_face
+import sys
+from pathlib import Path
+
+# Thêm parent directory để import config
+sys.path.insert(0, str(Path(__file__).parent.parent))
+import config
 
 
 def create_directory(directory):
@@ -16,14 +22,9 @@ if __name__ == "__main__":
 
     nameID = input("Enter Your Name: ").lower()
     
-    #setup parameters and paths
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(BASE_DIR, "..", "Dataset", "FaceData", "raw", nameID)
+    # Setup parameters and paths
+    path = str(config.RAW_DATASET_PATH / nameID)
     create_directory(path)
-    MINSIZE = 20
-    THRESHOLD = [0.6, 0.7, 0.7]
-    FACTOR = 0.709
-    INPUT_IMAGE_SIZE = 160
 
     with tf.Graph().as_default():
         
@@ -41,7 +42,7 @@ if __name__ == "__main__":
                     exit()
                 frame = imutils.resize(frame, width=600)
                 bounding_boxes, _ = align.detect_face.detect_face(
-                    frame, MINSIZE, pnet, rnet, onet, THRESHOLD, FACTOR
+                    frame, config.MINSIZE, pnet, rnet, onet, config.THRESHOLD, config.FACTOR
                 )
 
                 face_count = len(bounding_boxes)
@@ -67,7 +68,7 @@ if __name__ == "__main__":
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     break
 
-                if count >= 100:
+                if count >= config.CAPTURE_COUNT:
                     break
 
             cap.stop()
