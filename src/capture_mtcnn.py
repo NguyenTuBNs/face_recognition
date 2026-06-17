@@ -48,9 +48,8 @@ if __name__ == "__main__":
                 face_count = len(bounding_boxes)
 
                 if face_count == 0:
-                    cv2.putText(frame, "No face detected", (20, 40),
+                    cv2.putText(frame, "No face detected!", (20, 40),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
-
                 elif face_count == 1:
                 
                     x1, y1, x2, y2 = bounding_boxes[0][:4].astype(int)
@@ -61,7 +60,7 @@ if __name__ == "__main__":
                     cv2.imwrite(image_path, face_img)
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 else:
-                    cv2.putText(frame, "Multiple faces", (20, 40),
+                    cv2.putText(frame, "Multiple faces detected!", (20, 40),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
 
                 cv2.imshow("Face Capture", frame)

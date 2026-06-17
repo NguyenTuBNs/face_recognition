@@ -38,11 +38,11 @@ if __name__ == "__main__":
 
         face_count = len(faces)
         if face_count == 0:
-            cv2.rectangle(frame,(10, 10),(260, 60),(0, 0, 255),-1)
-            cv2.putText(frame,"No face detected!",(20, 45),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255, 255, 255),2)
+            cv2.putText(frame, "No face detected!", (20, 40),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
         elif face_count > 1:
-            cv2.rectangle(frame,(10, 10),(350, 60),(0, 0, 255),-1)
-            cv2.putText(frame,"Multiple faces detected!",(20, 45),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255, 255, 255),2)
+            cv2.putText(frame, "Multiple faces detected!", (20, 40),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
         else:
             x, y, w, h = faces[0]
             count = count + 1

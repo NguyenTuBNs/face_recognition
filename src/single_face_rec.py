@@ -110,12 +110,15 @@ def main():
                         cv2.putText(frame, str(round(best_class_probabilities[0], 3)), (x1, y2 + 20 + 17),
                                     cv2.FONT_HERSHEY_COMPLEX_SMALL,
                                     1, (255, 255, 255), thickness=1, lineType=2)
-                        
-                    elif faces_found > 1:
-                        cv2.putText(frame, "Only one face", (0, 100), cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                        1, (255, 255, 255), thickness=1, lineType=2)
                     else:
                         name = "Unknown"
+
+                elif faces_found > 1:
+                        cv2.putText(frame, "Multiple faces detected!", (0, 100), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.8, (0, 0, 255), thickness=2, lineType=2)
+                elif faces_found == 0:
+                        cv2.putText(frame, "No face detected!", (0, 100), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.8, (0, 0, 255), thickness=2, lineType=2)
                 
                 #FPS
                 current_time = time.time()
