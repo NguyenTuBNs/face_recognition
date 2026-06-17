@@ -30,7 +30,7 @@ if __name__ == "__main__":
         
         with tf.compat.v1.Session().as_default():
 
-            pnet, rnet, onet = align.detect_face.create_mtcnn(tf.compat.v1.get_default_session(), os.path.join(BASE_DIR, "align"))
+            pnet, rnet, onet = align.detect_face.create_mtcnn(tf.compat.v1.get_default_session(), os.path.join(config.SOURCE_DIR, "align"))
 
             cap = VideoStream(src=0).start()
             count = 0
