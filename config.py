@@ -13,6 +13,7 @@ ROOT_DIR = Path(__file__).resolve().parent
 DATA_DIR = ROOT_DIR / "Dataset"
 MODELS_DIR = ROOT_DIR / "Models"
 VIDEOS_DIR = ROOT_DIR / "Videos"
+SOURCE_DIR = ROOT_DIR / "src"
 
 # ---- Dataset paths ----
 RAW_DATASET_PATH = DATA_DIR / "FaceData" / "raw"          # Raw images for capture
