@@ -77,7 +77,7 @@ def main():
                 bounding_boxes, _ = align.detect_face.detect_face(frame, config.MINSIZE, pnet, rnet, onet, config.THRESHOLD, config.FACTOR)
 
                 faces_found = bounding_boxes.shape[0]
-
+            
                 if faces_found > 0:
                     face_batch = []
                     valid_boxes = []
@@ -127,6 +127,9 @@ def main():
                             cv2.rectangle(frame,(x1, y1),(x2, y2),(0, 255, 0),2)
                             cv2.putText(frame,name,(x1, y2 + 20),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(255, 255, 255),1)
                             cv2.putText(frame,f"{best_probability:.3f}",(x1, y2 + 40),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(255, 255, 255),1)
+                elif faces_found == 0:
+                        cv2.putText(frame, "No faces detected!", (0, 100), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.8, (0, 0, 255), thickness=2, lineType=2)
 
                 # Hien thi frame len man hinh
                 cv2.imshow('Face Recognition', frame)
