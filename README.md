@@ -42,7 +42,7 @@ python setup.py
 
 ---
 
-## Cấu trúc dự án (tối giản)
+## Cấu trúc dự án 
 
 - Dataset/  : chứa Dataset/FaceData/raw và Dataset/FaceData/processed
 - Models/   : chứa `20180402-114759.pb`, `facemodel.pkl`
@@ -57,7 +57,7 @@ python setup.py
 1. Capture ảnh thô:
 
 ```bash
-python src/capture.py
+python src/capture_mtcnn.py
 ```
 
 2. Align / tiền xử lý (tạo dataset processed):
@@ -87,13 +87,12 @@ python src/multi_face_rec.py --name sample.mp4
 
 ---
 
-## Ghi chú (chỉ những điểm trọng tâm)
+## Ghi chú 
 
 - Đặt `config.py` ở root; chỉnh tham số ở đó để ảnh hưởng toàn cục (paths, thresholds, sizes, GPU, v.v.).
 - Luôn chạy script từ project root để `import config` hoạt động.
 - Code chạy ở TF1-compat mode (đã gọi `tf.compat.v1.disable_eager_execution()`) nếu máy có TF2.
 - Khi capture, `config.CAPTURE_COUNT` là số ảnh mặc định cần chụp cho mỗi người.
-
 ---
 
 ## References
