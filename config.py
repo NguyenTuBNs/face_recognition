@@ -35,12 +35,13 @@ FACTOR = 0.709                      # scale factor cho image pyramid
 INPUT_IMAGE_SIZE = 160              # kích thước ảnh khuôn mặt đưa vào FaceNet (160x160)
 
 # ---- Tham số nhận diện ----
-RECOGNITION_THRESHOLD = 0.5         # dưới ngưỡng xác suất này -> gán nhãn "Unknown"
+RECOGNITION_THRESHOLD = 0.80         # dưới ngưỡng xác suất này -> gán nhãn "Unknown"
+SAFE_PROBABILITY = 0.7               # Ngưỡng an toàn cho phép in ra kết quả 
 
 # ---- Cấu hình camera/video ----
 FRAME_WIDTH = 640
 FRAME_HEIGHT = 480
-FPD = 3                             # Frames per Detect (tối ưu hiệu năng video)
+FPD = 4                             # Frames per Detect (tối ưu hiệu năng video)
 
 # ---- Tham số capture dataset ----
 CAPTURE_COUNT = 100                 # Số lượng ảnh cần capture cho mỗi người

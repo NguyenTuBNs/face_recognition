@@ -150,12 +150,13 @@ def main():
                                 preds.append(best_probability)
                                 names.append(name) 
 
-                if miss_count < 3 : 
+                if miss_count < 3: 
                     #Vẽ từng cái mỗi lần đọc frame
                     for (x1,y1,x2,y2), name ,pred in zip(boxs, names, preds):
-                        cv2.rectangle(frame,(x1, y1),(x2, y2),(0, 255, 0),2)
-                        cv2.putText(frame,name,(x1, y2 + 20),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(255, 255, 255),1)
-                        cv2.putText(frame,f"{pred:.3f}",(x1, y2 + 40),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(255, 255, 255),1)
+                        if pred > config.SAFE_PROBABILITY:
+                            cv2.rectangle(frame,(x1, y1),(x2, y2),(0, 255, 0),2)
+                            cv2.putText(frame,name,(x1, y2 + 20),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(255, 255, 255),1)
+                            cv2.putText(frame,f"{pred:.3f}",(x1, y2 + 40),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(255, 255, 255),1)
                 else:
                     cv2.putText(frame, "No faces detected!", (0, 100), cv2.FONT_HERSHEY_SIMPLEX,
                         0.8, (0, 0, 255), thickness=2, lineType=2)

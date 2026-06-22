@@ -99,19 +99,19 @@ def main():
                     best_class_probabilities = predictions[
                         np.arange(len(best_class_indices)), best_class_indices]
                     best_name = class_names[best_class_indices[0]]
-                    print("Name: {}, Probability: {}".format(best_name, best_class_probabilities))
-
+                    
                     if best_class_probabilities > config.RECOGNITION_THRESHOLD:
-                        cv2.rectangle(frame, (x1, y1), (x2,y2), (0, 255, 0), 2)
-
                         name = class_names[best_class_indices[0]]
+                    else:
+                        name = "Unknown"
+
+                    if best_class_probabilities > config.SAFE_PROBABILITY:
+                        cv2.rectangle(frame, (x1, y1), (x2,y2), (0, 255, 0), 2)
                         cv2.putText(frame, name, (x1, y2 + 20), cv2.FONT_HERSHEY_COMPLEX_SMALL,
                                     1, (255, 255, 255), thickness=1, lineType=2)
                         cv2.putText(frame, str(round(best_class_probabilities[0], 3)), (x1, y2 + 20 + 17),
                                     cv2.FONT_HERSHEY_COMPLEX_SMALL,
                                     1, (255, 255, 255), thickness=1, lineType=2)
-                    else:
-                        name = "Unknown"
 
                 elif faces_found > 1:
                         cv2.putText(frame, "Multiple faces detected!", (0, 100), cv2.FONT_HERSHEY_SIMPLEX,
